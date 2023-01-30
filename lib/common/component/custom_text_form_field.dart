@@ -6,6 +6,7 @@ class CustomTextFormField extends StatelessWidget {
   final String? errorText;
   const CustomTextFormField({
     this.hintText, 
+    this.errorText, 
     Key? key}) : super(key: key);
 
   @override
