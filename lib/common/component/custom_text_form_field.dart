@@ -46,6 +46,8 @@ class CustomTextFormField extends StatelessWidget {
         filled: true,
         //border= 모든 인풋 상태의 기본 스타일 세팅
         border: baseBorder,
+        //선택되지 않은, 글자를 쓸 수 있는 칸의 스타일.
+        enabledBorder: baseBorder,
         //선택됐을 때의 스타일.
         focusedBorder: baseBorder.copyWith(
           borderSide: baseBorder.borderSide.copyWith(
