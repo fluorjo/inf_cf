@@ -1,17 +1,29 @@
 import 'dart:convert';
+
 import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:inf_cf/common/const/colors.dart';
+import 'package:inf_cf/common/const/data.dart';
 import 'package:inf_cf/common/layout/default_layout.dart';
 import 'package:inf_cf/common/component/custom_text_form_field.dart';
+import 'package:inf_cf/common/view/root_tab.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
   @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  String username = '';
+  String password = '';
+  @override
   Widget build(BuildContext context) {
+
     final dio = Dio();
     //요청 보낼 local host 설정하는 것. 안드로이드 에뮬레이터에서만 필요한 과정.
     const emulatorIp = '10.0.2.2:3000';
@@ -39,13 +51,18 @@ class LoginScreen extends StatelessWidget {
                   width: MediaQuery.of(context).size.width / 3 * 2,
                 ),
                 CustomTextFormField(
-                    hintText: "이메일을 입력해주세요.", onChanged: (String value) {}),
+                    hintText: "이메일을 입력해주세요.",
+                    onChanged: (String value) {
+                      username = value;
+                    }),
                 const SizedBox(
                   height: 16.0,
                 ),
                 CustomTextFormField(
                   hintText: "비밀번호를 입력해주세요.",
-                  onChanged: (String value) {},
+                  onChanged: (String value) {
+                    password = value;
+                  },
                   obscureText: true,
                 ),
                 const SizedBox(
@@ -54,7 +71,9 @@ class LoginScreen extends StatelessWidget {
                 ElevatedButton(
                   onPressed: () async {
                     //ID:비번
-                    final rawString = 'test@codefactory.ai:testtest';
+                    final rawString = '$username:$password';
+
+                    print(rawString);
                     //string에서 string으로 변환
                     Codec<String, String> stringToBase64 = utf8.fuse(base64);
 
@@ -66,6 +85,16 @@ class LoginScreen extends StatelessWidget {
                         'authorization': 'Basic $token',
                       }),
                     );
+
+                    final refreshToken = resp.data['refreshToken'];
+                    final accessToken = resp.data['accessToken'];
+                    await storage.write(key: REFRESH_TOKEN_KEY, value: refreshToken);
+                    await storage.write(key: ACCESS_TOKEN_KEY, value: accessToken);
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => const RootTab(),
+                      ),
+                    );
 //응답받은 data값, body의 데이터값.
                     print(resp.data);
                   },
@@ -76,7 +105,7 @@ class LoginScreen extends StatelessWidget {
                 ),
                 TextButton(
                   onPressed: () async {
-                    final refreshToken =
+                    const refreshToken =
                         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3RAY29kZWZhY3RvcnkuYWkiLCJzdWIiOiJmNTViMzJkMi00ZDY4LTRjMWUtYTNjYS1kYTlkN2QwZDkyZTUiLCJ0eXBlIjoicmVmcmVzaCIsImlhdCI6MTY3NTI3NDU5NiwiZXhwIjoxNjc1MzYwOTk2fQ.3up-IzJzN5gIqMka3PIgJB7XtaWYBJ-1ofoSs4a7SVA';
                     final resp = await dio.post(
                       'http://$ip/auth/token',
@@ -84,8 +113,8 @@ class LoginScreen extends StatelessWidget {
                         'authorization': 'Bearer $refreshToken',
                       }),
                     );
-                                        print(resp.data);
 
+                    print(resp.data);
                   },
                   style: TextButton.styleFrom(
                     foregroundColor: Colors.black,
