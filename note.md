@@ -20,3 +20,20 @@ test@codefactory.ai:testtest
 
 15강
 - initstate에는 await 못 넣음. 그래서 함수를 따로 만들어 줘야 함. 
+
+16강
+  AppBar? renderAppBar() {
+    if (title == null) {
+      return null;
+    } else {
+      return AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        title: Text(
+          title!,
+        ),
+      );
+    }
+  }
+  - 이런 식으로 null 될 수 있는 경우를 조건문으로 써줄 때는 else에서 ! 붙여주면 됨. 
+  - type: BottomNavigationBarType.shifting 선택된 걸 좀 더 크게 보여줌.
