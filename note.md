@@ -37,3 +37,20 @@ test@codefactory.ai:testtest
   }
   - 이런 식으로 null 될 수 있는 경우를 조건문으로 써줄 때는 else에서 ! 붙여주면 됨. 
   - type: BottomNavigationBarType.shifting 선택된 걸 좀 더 크게 보여줌.
+
+17강
+- class _RootTabState extends State<RootTab> with SingleTickerProviderStateMixin{
+  
+  TabController controller;
+  int index = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = TabController(length: 4, vsync: this);
+    
+    탭 컨트롤러에선 vsync랑 SingleTickerProviderStateMixin를 넣어서 이런 식으로 세팅해줘야 함. 
+- late와 ? 해주는 것의 차이
+late:나중에 값이 입력될 것이므로 최초의 한 번만 null 값을 허용한다. 
+? : null을 계속적으로 허용한다. 
+지금 이 진도에서는 ?를 쓰면 controller를 쓸 때마다 null처리를 해줘야 함. if controller==null 어쩌구.. 를 계속 해줘야 함. 
