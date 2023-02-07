@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:inf_cf/common/const/colors.dart';
 import 'package:inf_cf/common/const/data.dart';
@@ -21,30 +22,37 @@ class _SplashScreenState extends State<SplashScreen> {
     checkToken();
   }
 
+  void deleteToken() async {
+    await storage.deleteAll();
+  }
 
-void deleteToken() async {
-  await storage.deleteAll();
-}
 //init state에 await 쓸 수 없어서 이렇게 따로 함수 만들어주는 것.
   void checkToken() async {
     final refreshToken = await storage.read(key: REFRESH_TOKEN_KEY);
     final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
-
-    if (refreshToken == null || accessToken == null) {
+    final dio = Dio();
+    try {
+      final resp = await dio.post(
+        'http://$ip/auth/token',
+        options: Options(headers: {
+          'authorization': 'Bearer $refreshToken',
+        }),
+      );
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
-          builder: (_) => LoginScreen(),
+          builder: (_) => const RootTab(),
         ),
         (route) => false,
       );
-    } else {
+    } catch (e) {
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
-          builder: (_) => RootTab(),
+          builder: (_) => const LoginScreen(),
         ),
         (route) => false,
       );
     }
+
   }
 
   @override

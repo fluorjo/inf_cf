@@ -25,10 +25,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
 
     final dio = Dio();
-    //요청 보낼 local host 설정하는 것. 안드로이드 에뮬레이터에서만 필요한 과정.
-    const emulatorIp = '10.0.2.2:3000';
-    const simulatorIp = '127.0.0.1:3000';
-    final ip = Platform.isIOS ? simulatorIp : emulatorIp;
+
 
     return DefaultLayout(
       child: SingleChildScrollView(
@@ -105,16 +102,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 TextButton(
                   onPressed: () async {
-                    const refreshToken =
-                        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3RAY29kZWZhY3RvcnkuYWkiLCJzdWIiOiJmNTViMzJkMi00ZDY4LTRjMWUtYTNjYS1kYTlkN2QwZDkyZTUiLCJ0eXBlIjoicmVmcmVzaCIsImlhdCI6MTY3NTI3NDU5NiwiZXhwIjoxNjc1MzYwOTk2fQ.3up-IzJzN5gIqMka3PIgJB7XtaWYBJ-1ofoSs4a7SVA';
-                    final resp = await dio.post(
-                      'http://$ip/auth/token',
-                      options: Options(headers: {
-                        'authorization': 'Bearer $refreshToken',
-                      }),
-                    );
-
-                    print(resp.data);
                   },
                   style: TextButton.styleFrom(
                     foregroundColor: Colors.black,
