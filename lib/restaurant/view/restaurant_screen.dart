@@ -40,27 +40,8 @@ class RestaurantScreen extends StatelessWidget {
                 itemCount: snapshot.data!.length,
                 itemBuilder: (_, index) {
                   final item = snapshot.data![index];
-                  final pitem = RestaurantModel.fromJson(
-                    json: item
-
-                  );
-                  return RestaurantCard(
-                    image: Image.network(
-                      pitem.thumbUrl,
-                      fit: BoxFit.cover,
-                    ),
-                    // image: Image.asset(
-                    //   'asset/img/food/ddeok_bok_gi.jpg',
-                    //   fit: BoxFit.cover,
-                    //   //전체를 커버
-                    // ),
-                    name: pitem.name,
-                    tags: pitem.tags,
-                    ratingsCount: pitem.ratingsCount,
-                    ratings: pitem.ratings,
-                    deliveryTime: pitem.deliveryTime,
-                    deliveryFee: pitem.deliveryFee,
-                  );
+                  final pitem = RestaurantModel.fromJson(json: item);
+                  return RestaurantCard.fromModel(model: pitem);
                 },
                 separatorBuilder: (_, index) {
                   return const SizedBox(
