@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:inf_cf/common/const/data.dart';
 import 'package:inf_cf/restaurant/component/restaurant_card.dart';
+import 'package:inf_cf/restaurant/model/restaurant_model.dart';
 
 class RestaurantScreen extends StatelessWidget {
   const RestaurantScreen({Key? key}) : super(key: key);
@@ -39,22 +40,34 @@ class RestaurantScreen extends StatelessWidget {
                 itemCount: snapshot.data!.length,
                 itemBuilder: (_, index) {
                   final item = snapshot.data![index];
-                  return RestaurantCard(
-                      image: Image.network(
-                        'http://$ip${item['thumbUrl']}',
-                        fit: BoxFit.cover,
-                      ),
-                      // image: Image.asset(
-                      //   'asset/img/food/ddeok_bok_gi.jpg',
-                      //   fit: BoxFit.cover,
-                      //   //전체를 커버
-                      // ),
+                  final pitem = RestaurantModel(
+                      id: item['id'],
                       name: item['name'],
+                      thumbUrl: 'http://$ip${item['thumbUrl']}',
                       tags: List<String>.from(item['tags']),
+                      priceRange: RestaurantPriceRange.values
+                          .firstWhere((e) => e.name == item['priceRange']),
                       ratingsCount: item['ratingsCount'],
                       ratings: item['ratings'],
                       deliveryTime: item['deliveryTime'],
                       deliveryFee: item['deliveryFee']);
+                  return RestaurantCard(
+                    image: Image.network(
+                      pitem.thumbUrl,
+                      fit: BoxFit.cover,
+                    ),
+                    // image: Image.asset(
+                    //   'asset/img/food/ddeok_bok_gi.jpg',
+                    //   fit: BoxFit.cover,
+                    //   //전체를 커버
+                    // ),
+                    name: pitem.name,
+                    tags: pitem.tags,
+                    ratingsCount: pitem.ratingsCount,
+                    ratings: pitem.ratings,
+                    deliveryTime: pitem.deliveryTime,
+                    deliveryFee: pitem.deliveryFee,
+                  );
                 },
                 separatorBuilder: (_, index) {
                   return const SizedBox(
