@@ -1,4 +1,6 @@
-# Miscellaneous
+#
+/asset
+ Miscellaneous
 *.class
 *.log
 *.pyc
